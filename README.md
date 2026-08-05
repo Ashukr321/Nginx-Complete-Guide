@@ -1,3 +1,4 @@
+![alt text](<resoruces/nginx_server_architecture (1).png>)
 ---
 title: "Nginx Complete Learning Roadmap"
 
@@ -349,3 +350,62 @@ Supports real-time applications:
 38. Rate Limiting
 39. WebSocket Proxy
 40. HTTP → HTTPS Redirect
+
+
+---
+
+
+## 1. Static website hosting
+The simplest setup — Nginx just serves files directly from disk, no backend involved at all.
+
+![alt text](resoruces/_01_scenario_static_hosting.png)
+
+Flow: Browser asks for a page → Nginx matches the request to a location block → the root directive tells it which folder to look in → it reads the matching file straight off disk and returns it. No app server ever gets involved. Used for portfolios, landing pages, or a React/Vue production build.
+
+
+## 2. Reverse proxy
+Now Nginx sits in front of an application server instead of serving files itself.
+![E:\Job switch\Nginx-Complete-Guide\resoruces\scenario_reverse_proxy.png](resoruces/scenario_reverse_proxy.png)
+
+Flow: The browser never talks to the app server directly — it only knows about Nginx. Nginx receives the request, and proxy_pass forwards it to whatever's running behind it (Express, NestJS, Django, Spring Boot). Nginx also adds headers so the backend still knows the real client IP. This is the backbone pattern almost every other scenario builds on.
+
+## 3. Load balancer
+
+Same idea as a reverse proxy, but now there's more than one backend to choose from.
+![alt text](resoruces/scenario_load_balancer.png)
+Flow: Every incoming request hits Nginx first. Nginx picks one server from the upstream group using a strategy — round robin (default, just cycles through), least connections (send to whichever server is least busy), or IP hash (same client always lands on the same server, useful for session stickiness). If a server stops responding, health checks pull it out of rotation automatically.
+
+## 4. SSL termination
+Nginx handles all the encryption overhead so your backend doesn't have to.
+![alt text](resoruces/scenario_ssl_termination.png)
+Flow: The client connects to Nginx over HTTPS, so all the TLS handshake and certificate work happens right there. Nginx decrypts the traffic and passes it on to the backend as plain HTTP over the internal network — the backend never needs its own certificate. Add HSTS and an HTTP → HTTPS redirect on top and you've covered the full security-features section too.
+
+## 5. Serve React build + proxy API (MERN pattern)
+Nginx splits traffic: static frontend files go one way, API calls go another.
+![](resoruces/scenario_react_plus_api.png)
+Flow: One server block, two location blocks. Requests to / (or any frontend route) hit try_files, which serves the static React build — falling back to index.html for client-side routing. Requests to /api get matched first and proxy_passed straight to the Node backend. This is the standard way to deploy a MERN app behind one domain.
+
+## 6. Multiple websites (virtual hosts)
+One Nginx instance, many completely separate sites.
+![alt text](resoruces/scenario_virtual_hosts.png)
+Flow: All three domains point at the same server IP. When a request arrives, Nginx reads the Host header and matches it against server_name in each server block. Each block has its own root or proxy_pass, so example.com, shop.com, and blog.com end up served completely independently — even though it's one Nginx process handling all of them.
+
+## 7. Static asset server
+Keep heavy files off the application server entirely.
+![](resoruces/scenario_static_assets.png)
+Flow: A location block matches file extensions or a path prefix like /assets/, and Nginx serves those bytes straight from disk using sendfile — no PHP, Node, or Python process ever wakes up for it. Add gzip/brotli compression and cache headers here and images, videos, PDFs, and JS bundles load fast without costing backend CPU.
+
+## 8. URL rewrite & redirect
+Nginx can quietly change the URL before anything else sees it.
+![alt text](resoruces/scenario_rewrite_redirect.png)
+Flow: The browser asks for /old-page. Nginx matches it in a location or rewrite rule and sends back a 301 (permanent) response pointing at /new-page — the browser then makes a second request to the new URL. The same mechanism forces HTTP → HTTPS and normalizes trailing slashes.
+
+## 9. Rate limiting
+Nginx can reject excess requests before they ever reach your app.
+![alt text](resoruces/scenario_rate_limiting.png)
+
+
+## 10. WebSocket proxy
+The last scenario — keeping a persistent, real-time connection alive through Nginx.
+![alt text](resoruces/scenario_websocket_proxy.png)
+Flow: A normal HTTP request comes in with an Upgrade: websocket header. Nginx has to explicitly forward Upgrade and Connection headers (this doesn't happen by default with plain proxy_pass) and hold the connection open instead of treating it as a one-shot request/response. Once upgraded, both sides keep that single TCP connection alive for as long as needed — this is what powers chat apps, live notifications, dashboards, and multiplayer games.
