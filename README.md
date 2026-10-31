@@ -8,6 +8,10 @@ subtitle: "Revision & Learning Path for Beginners"
 
 [Nginx Roadmap 🚀](resoruces/nginx-learning-roadmap.pdf)
 
+> 🆕 **New to web servers?** Start with [Web Servers Explained](WEB-SERVER-GUIDE.md) — web server vs Node.js, why you need one, Apache vs Nginx, and the benefits ([PDF](resoruces/web-server-guide.pdf)).
+>
+> 🎯 **Preparing for interviews?** See [Nginx Interview Questions](interview-questions/README.md) — 44 questions (basic → intermediate → advanced → system design), each with scenario, how it works, and step-by-step practical setup.
+
 # 📚 Nginx Complete Learning Roadmap
 
 ## 1. Core Concepts (Must Know)
