@@ -1,0 +1,11 @@
+# Context is the repo root (see docker-compose.yml)
+**/node_modules
+**/.next
+**/.git
+**/.env*
+!website/.env.example
+**/*.log
+**/npm-debug.log*
+.claude
+website/.claude
+website/coverage

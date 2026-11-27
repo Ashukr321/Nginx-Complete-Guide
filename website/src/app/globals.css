@@ -1,0 +1,83 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --muted: #525252;
+  --border: #e5e5e5;
+  --panel: #fafafa;
+  --accent: #009639;
+}
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --muted: #a3a3a3;
+  --border: #262626;
+  --panel: #111111;
+  --accent: #34d27a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-panel: var(--panel);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Language variants: English always exists; another language shows only when the page has it. */
+.variant {
+  display: none;
+}
+.variant[data-lang="en"] {
+  display: block;
+}
+html[data-lang="hinglish"] .variants[data-langs~="hinglish"] > .variant[data-lang="en"],
+html[data-lang="hi"] .variants[data-langs~="hi"] > .variant[data-lang="en"] {
+  display: none;
+}
+html[data-lang="hinglish"] .variants[data-langs~="hinglish"] > .variant[data-lang="hinglish"],
+html[data-lang="hi"] .variants[data-langs~="hi"] > .variant[data-lang="hi"] {
+  display: block;
+}
+
+.lang-note {
+  display: none;
+}
+html[data-lang="hinglish"] .lang-note[data-missing~="hinglish"],
+html[data-lang="hi"] .lang-note[data-missing~="hi"] {
+  display: block;
+}
+
+.prose :where(a):not(:where([class~="not-prose"] *)) {
+  color: var(--accent);
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.prose :where(pre) {
+  border: 1px solid var(--border);
+}
+.prose :where(img) {
+  border-radius: 0.5rem;
+  background: #fff;
+}
+
+[cmdk-item][data-selected="true"] {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+}

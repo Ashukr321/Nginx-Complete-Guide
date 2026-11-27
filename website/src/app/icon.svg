@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#000000"/>
+  <!-- Nginx-style mark: green hexagon with a white N, at 80% so it is maskable-safe -->
+  <g transform="translate(51.2 51.2) scale(0.8)">
+    <path fill="#009639" stroke="#009639" stroke-width="36" stroke-linejoin="round"
+          d="M256 40 L443 148 L443 364 L256 472 L69 364 L69 148 Z"/>
+    <path fill="#ffffff" d="M176 360 V152 h40 l86 128 V152 h40 v208 h-40 l-86 -128 v128 z"/>
+  </g>
+</svg>
